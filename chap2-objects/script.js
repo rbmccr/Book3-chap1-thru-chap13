@@ -95,8 +95,9 @@ function changeBio(string) {
   campaign.biography = string;
 }
 
+// This function modifies the object in the first index spot of the calendar array
+// No new indeces are created in the array, but the object is modified correctly when this function is passed two strings
 function scheduleEvent(event, eventDate) {
-  let schedule = campaign.calendar;
-  schedule.unshift(Object.defineProperty(schedule, event, {value: eventDate, configurable: true, enumerable: true}));
-  delete schedule[0];
+  let schedule = campaign.calendar[0];
+  schedule = Object.defineProperty(schedule, event, {value: eventDate, configurable: true, enumerable: true});
 }
