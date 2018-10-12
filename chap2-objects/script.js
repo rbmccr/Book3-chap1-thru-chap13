@@ -91,6 +91,11 @@ function addToImageGallery(key, newImage) {
   // 'writable: true' allows an assignment operator to overwrite the property - not used here because string is a simple URL that does not need to be added/subtracted/etc
 }
 
+//alternatively.... 
+function addimage2(key, newImage) {
+  campaign.images[key] = newImage;
+}
+
 function changeBio(string) {
   campaign.biography = string;
 }

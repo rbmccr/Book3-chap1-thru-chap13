@@ -4410,13 +4410,48 @@ const githubData = [
 ]
 
 let objects = 0;
+// question #1
 let commits = 0;
+// question #2
+let eventTotal = 0;
+let eventArray = [];
+let eventObject = {};
 
 // Iterate the array to define each unique object
 for(var i = 0; i < githubData.length; i++) {
   objects = githubData[i];
-
-  for (key in objects) {
-
+  console.log(objects);
+  // seek out commits inside payload key
+  if (objects.payload.hasOwnProperty('commits')) {
+    commits += objects.payload.commits.length; //commit keys contain arrays
   }
+  // push event types to array variable
+  eventArray.push(objects.type);
 }
+
+/* This function counts the eventName event type by looping through
+   the event array (values pushed from objects) and outputs an object
+   with the event totaled by type
+*/
+
+function countUniqueEvents(eventName) { //pass in unique event variable
+  for (let i = 0; i < eventArray.length; i++) {
+    if (eventArray[i].toLowerCase() === eventName) {
+      eventTotal++;
+    }
+  }
+  eventObject[eventName] = eventTotal;
+  eventTotal = 0; //reset counter for unique events
+  return eventObject;
+}
+
+countUniqueEvents('pushevent');
+countUniqueEvents('pullrequestevent');
+countUniqueEvents('deleteevent');
+countUniqueEvents('createevent');
+countUniqueEvents('issuecommentevent');
+
+//Total commits: 59
+console.log(`Total commits: ${commits}`);
+//Event totals: create: 4, delete: 4, comment: 4, pull: 7, push: 11
+console.log(eventObject);
