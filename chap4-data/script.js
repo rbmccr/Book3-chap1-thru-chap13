@@ -4410,29 +4410,26 @@ const githubData = [
 ]
 
 let objects = 0;
-// question #1
 let commits = 0;
-// question #2
 let eventTotal = 0;
 let eventArray = [];
 let eventObject = {};
 
-// Iterate the array to define each unique object
+// question #1: Iterate the array to define each unique object
 for(var i = 0; i < githubData.length; i++) {
   objects = githubData[i];
   console.log(objects);
-  // seek out commits inside payload key
+  // seek out commits inside payload key of each object
   if (objects.payload.hasOwnProperty('commits')) {
     commits += objects.payload.commits.length; //commit keys contain arrays
   }
-  // push event types to array variable
+  // question #2: push event types to array variable for use below
   eventArray.push(objects.type);
 }
 
 /* This function counts the eventName event type by looping through
    the event array (values pushed from objects) and outputs an object
-   with the event totaled by type
-*/
+   with the event totaled by type */
 
 function countUniqueEvents(eventName) { //pass in unique event variable
   for (let i = 0; i < eventArray.length; i++) {
@@ -4451,7 +4448,62 @@ countUniqueEvents('deleteevent');
 countUniqueEvents('createevent');
 countUniqueEvents('issuecommentevent');
 
-//Total commits: 59
+// question #3 
+// !IMPORTANT: I assumed any pull event meant the pull
+// request was approved by Steve. I couldn't find any particular 
+// feature of the pull_request object indicating approval/denial
+let githubUsers = [];
+
+for(var i = 0; i < githubData.length; i++) {
+  objects = githubData[i];
+  if (objects.type === 'PullRequestEvent') {
+     githubUsers.push(objects.payload.pull_request.user.login);
+    }
+  }
+
+// question #4
+let repo = []
+for(let i = 0; i < githubData.length; i++) {
+  objects = githubData[i];
+  repo.push(objects.repo.id); //get id of all repositories
+}
+
+let repo_count = [];
+function compressArray(array) { //determine count of each id
+	// make a copy of the input array
+	let copy = array.slice(0);
+	// first loop goes over every element
+	for (let i = 0; i < array.length; i++) {
+		let counter = 0;	
+		// loop over every element in the copy and see if it's the same
+		for (let j = 0; j < copy.length; j++) {
+			if (array[i] == copy[j]) {
+				// increase amount of times duplicate is found
+				counter++;
+				// sets item to undefined
+				delete copy[j];
+			}
+		}
+ 
+		if (counter > 0) {
+			let a = new Object();
+			a.value = array[i];
+			a.count = counter;
+			repo_count.push(a);
+		}
+	}
+ 
+	return repo_count;
+};
+
+compressArray(repo);
+
+console.log(repo_count);
+
+//Answer to question #1: Total commits: 59
 console.log(`Total commits: ${commits}`);
-//Event totals: create: 4, delete: 4, comment: 4, pull: 7, push: 11
+//Answer to question #2: Event totals: create: 4, delete: 4, comment: 4, pull: 7, push: 11
 console.log(eventObject);
+//Answer to question #3: Array of usernames with approved pull requests
+console.log(githubUsers);
+//Answer to question #4: 
