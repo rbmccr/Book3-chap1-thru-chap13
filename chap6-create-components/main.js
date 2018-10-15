@@ -206,5 +206,6 @@ for (let i = 0; i < 5; i++) {
   section.textContent = text;
   section.setAttribute('class', 'message');
   fragment.appendChild(section);
-  target.appendChild(section);
 }
+
+target.appendChild(fragment);
