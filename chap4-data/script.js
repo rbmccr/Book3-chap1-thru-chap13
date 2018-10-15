@@ -4418,6 +4418,8 @@ for(var i = 0; i < githubData.length; i++) {
   // seek out commits inside payload key of each object
   if (githubData[i].payload.hasOwnProperty('commits')) {
     commits += githubData[i].payload.commits.length; //commit keys contain arrays
+  } else if (githubData[i].type === 'PullRequestEvent') {
+    commits += githubData[i].payload.pull_request.commits;
   }
   // question #2: push event types to array variable for use below
   eventArray.push(githubData[i].type);
@@ -4445,13 +4447,11 @@ countUniqueEvents('createevent');
 countUniqueEvents('issuecommentevent');
 
 // question #3 
-// !IMPORTANT: I assumed any pull event meant the pull
-// request was approved by Steve. I couldn't find any particular 
-// feature of the pull_request object indicating approval/denial
 let githubUsers = [];
 
 for(let i = 0; i < githubData.length; i++) {
-  if (githubData[i].type === 'PullRequestEvent') {
+  if (githubData[i].type === 'PullRequestEvent' && 
+  githubData[i].payload.pull_request.user.login != 'stevebrownlee') { //Steve didn't approve his own PR's...
      githubUsers.push(githubData[i].payload.pull_request.user.login);
     }
   }
@@ -4505,6 +4505,12 @@ for (let i = 0; i < githubData.length; i++) {
     b.event_type = githubData[i].type;
     b.commits = githubData[i].payload.commits.length; //commit keys contain arrays
     objectsWithCommits.push(b);
+  } else if (githubData[i].type === 'PullRequestEvent') {
+    let b = new Object();
+    b.event_id = githubData[i].id;
+    b.event_type = githubData[i].type;
+    b.commits = githubData[i].payload.pull_request.commits;
+    objectsWithCommits.push(b);
   }
 }
 
@@ -4522,9 +4528,75 @@ for (let i = 0; i < objectsWithCommits.length; i++) {
   }
 }
 
+// alternative solution for #5:
+/*
+function mostCommits(dataArray) {
+  let commits = 0
+  for (let i = 0; i < dataArray.length; i++) {
+    if (dataArray[i].payload.hasOwnProperty("commits") === true &&
+      dataArray[i].payload.commits.length > commits) {
+      commits = dataArray[i].payload.commits.length
+    } if (dataArray[i].type === ('PullRequestEvent') &&
+      dataArray[i].payload.pull_request.commits > commits) {
+      commits = dataArray[i].payload.pull_request.commits
+    }
+  }
+  return commits
+}
+
+let eventMostCommited = mostCommits(githubData);
+console.log(eventMostCommited); */
+
+// question #6 - which programming languages were affected by Steve's events?
+
+//Get some object data to look at the 
+let languages = [];
+for (let i = 0; i < githubData.length; i++) {
+  if (githubData[i].type === 'PullRequestEvent') {
+    let c = new Object();
+    c.event_id = githubData[i].id;
+    c.base = githubData[i].payload.pull_request.base.repo.language;
+    c.head = githubData[i].payload.pull_request.head.repo.language; //same info as base, so disregard
+    languages.push(c);
+  }
+}
+
+// question #7 - which programming languages were MOST affected by Steve's events?
+
+let removeObjData = [];
+let mostCommonLangaugeString;
+let mostCommonLangauge;
+
+//removes unecessary object data from languages array
+for (let i = 0; i < languages.length; i++) {
+  removeObjData.push(languages[i].base);
+}
+
+console.log(removeObjData);
+
+//Count instances of Python and javaScript 
+let jscript = 0;
+let python = 0;
+
+for (let i = 0; i < removeObjData.length; i++) {
+    if (removeObjData[i] === "JavaScript") {
+      jscript++;
+    } else if (removeObjData[i] === "Python") {
+      python++;
+    }
+}
+
+if (jscript > python) {
+  mostCommonLangaugeString = "JavaScript"
+  mostCommonLangauge = jscript;
+} else {
+  mostCommonLangaugeString = "Python"
+  mostCommonLangauge = python;
+}
+
 // ------------------------- Answers ------------------------- //
 
-//Answer to question #1: Total commits: 59
+//Answer to question #1: Total commits: 84 (59 push, 25 pull)
 console.log(`Answer #1... Total commits: ${commits}`);
 //Answer to question #2: Event totals: create: 4, delete: 4, comment: 4, pull: 7, push: 11
 console.log('Answer #2...', eventObject);
@@ -4534,4 +4606,7 @@ console.log('Answer #3...', githubUsers);
 console.log('Answer #4...', repo_count);
 //Answer to question #5:
 console.log('Answer #5... Max Commits Event ID:', maxCommitsEventId, 'Total Commits:', maxCommits);
-//Answer to question #6:
+//Answer to question #6: Python and JavaScript
+console.log('Answer #6...', languages);
+//Answer to question #7:
+console.log(`Answer #7... The most common language affected is ${mostCommonLangaugeString} with ${mostCommonLangauge} modifications.`)
