@@ -110,3 +110,16 @@ hyperbole.forEach( (word) => {
   sentence += word + " ";
   console.log(sentence)
 });
+
+// ------------------------ Querying the DOM
+
+var title = document.querySelector('title');
+title.classList.add("urgent");
+console.log(title);
+
+var h1 = document.querySelector('h1');
+h1.classList.add("urgent");
+console.log(h1);
+
+var second_article = document.querySelectorAll('.article__section')[1];
+second_article.classList.add('highlight');

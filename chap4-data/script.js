@@ -1,5 +1,3 @@
-// practice exercise -------------------------------------------------
-
 const githubData = [
   {
     "id": "8033299496",
@@ -4409,7 +4407,6 @@ const githubData = [
   }
 ]
 
-let objects = 0;
 let commits = 0;
 let eventTotal = 0;
 let eventArray = [];
@@ -4417,21 +4414,20 @@ let eventObject = {};
 
 // question #1: Iterate the array to define each unique object
 for(var i = 0; i < githubData.length; i++) {
-  objects = githubData[i];
-  console.log(objects);
+  console.log(githubData[i]);
   // seek out commits inside payload key of each object
-  if (objects.payload.hasOwnProperty('commits')) {
-    commits += objects.payload.commits.length; //commit keys contain arrays
+  if (githubData[i].payload.hasOwnProperty('commits')) {
+    commits += githubData[i].payload.commits.length; //commit keys contain arrays
   }
   // question #2: push event types to array variable for use below
-  eventArray.push(objects.type);
+  eventArray.push(githubData[i].type);
 }
 
 /* This function counts the eventName event type by looping through
    the event array (values pushed from objects) and outputs an object
    with the event totaled by type */
 
-function countUniqueEvents(eventName) { //pass in unique event variable
+function countUniqueEvents(eventName) { //pass in unique event name (string)
   for (let i = 0; i < eventArray.length; i++) {
     if (eventArray[i].toLowerCase() === eventName) {
       eventTotal++;
@@ -4454,21 +4450,20 @@ countUniqueEvents('issuecommentevent');
 // feature of the pull_request object indicating approval/denial
 let githubUsers = [];
 
-for(var i = 0; i < githubData.length; i++) {
-  objects = githubData[i];
-  if (objects.type === 'PullRequestEvent') {
-     githubUsers.push(objects.payload.pull_request.user.login);
+for(let i = 0; i < githubData.length; i++) {
+  if (githubData[i].type === 'PullRequestEvent') {
+     githubUsers.push(githubData[i].payload.pull_request.user.login);
     }
   }
 
-// question #4
+// question #4 - List all repos where Steve had an event and show how many events on each
 let repo = []
-for(let i = 0; i < githubData.length; i++) {
-  objects = githubData[i];
-  repo.push(objects.repo.id); //get id of all repositories
+let repo_count = [];
+
+for (let i = 0; i < githubData.length; i++) {
+  repo.push(githubData[i].repo.id); //get id of all repositories listed in objects
 }
 
-let repo_count = [];
 function compressArray(array) { //determine count of each id
 	// make a copy of the input array
 	let copy = array.slice(0);
@@ -4484,10 +4479,11 @@ function compressArray(array) { //determine count of each id
 				delete copy[j];
 			}
 		}
- 
+    /* nested loop ends, and any copies of array[i] (repo_id) are recorded in an object and
+    then pushed to an array */
 		if (counter > 0) {
 			let a = new Object();
-			a.value = array[i];
+			a.repo_id = array[i];
 			a.count = counter;
 			repo_count.push(a);
 		}
@@ -4498,12 +4494,44 @@ function compressArray(array) { //determine count of each id
 
 compressArray(repo);
 
-console.log(repo_count);
+// question #5 - which event had the greatest number of commits?
+let objectsWithCommits = [];
+
+// Iterate the array to seek out commits inside payload key of each unique object
+for (let i = 0; i < githubData.length; i++) {
+  if (githubData[i].payload.hasOwnProperty('commits')) {
+    let b = new Object();
+    b.event_id = githubData[i].id;
+    b.event_type = githubData[i].type;
+    b.commits = githubData[i].payload.commits.length; //commit keys contain arrays
+    objectsWithCommits.push(b);
+  }
+}
+
+console.log(objectsWithCommits);
+
+// Determine maximum commits by comparing all objects in the array
+  // This function makes a new array of all commits values, and the maximum value is taken from it
+var maxCommits = Math.max.apply(Math, objectsWithCommits.map(function(obj) { return obj.commits }));
+
+// Determine event id associated with max commits by looping through array and comparing commits to max commits
+var maxCommitsEventId;
+for (let i = 0; i < objectsWithCommits.length; i++) {
+  if (objectsWithCommits[i].commits === maxCommits) {
+    maxCommitsEventId = objectsWithCommits[i].event_id;
+  }
+}
+
+// ------------------------- Answers ------------------------- //
 
 //Answer to question #1: Total commits: 59
-console.log(`Total commits: ${commits}`);
+console.log(`Answer #1... Total commits: ${commits}`);
 //Answer to question #2: Event totals: create: 4, delete: 4, comment: 4, pull: 7, push: 11
-console.log(eventObject);
+console.log('Answer #2...', eventObject);
 //Answer to question #3: Array of usernames with approved pull requests
-console.log(githubUsers);
+console.log('Answer #3...', githubUsers);
 //Answer to question #4: 
+console.log('Answer #4...', repo_count);
+//Answer to question #5:
+console.log('Answer #5... Max Commits Event ID:', maxCommitsEventId, 'Total Commits:', maxCommits);
+//Answer to question #6:
