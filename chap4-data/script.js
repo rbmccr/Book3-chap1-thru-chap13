@@ -4529,23 +4529,23 @@ for (let i = 0; i < objectsWithCommits.length; i++) {
 }
 
 // alternative solution for #5:
-/*
-function mostCommits(dataArray) {
-  let commits = 0
-  for (let i = 0; i < dataArray.length; i++) {
-    if (dataArray[i].payload.hasOwnProperty("commits") === true &&
-      dataArray[i].payload.commits.length > commits) {
-      commits = dataArray[i].payload.commits.length
-    } if (dataArray[i].type === ('PullRequestEvent') &&
-      dataArray[i].payload.pull_request.commits > commits) {
-      commits = dataArray[i].payload.pull_request.commits
-    }
-  }
-  return commits
-}
 
-let eventMostCommited = mostCommits(githubData);
-console.log(eventMostCommited); */
+// function mostCommits(dataArray) {
+//   let commits = 0
+//   for (let i = 0; i < dataArray.length; i++) {
+//     if (dataArray[i].payload.hasOwnProperty("commits") === true &&
+//       dataArray[i].payload.commits.length > commits) {
+//       commits = dataArray[i].payload.commits.length
+//     } if (dataArray[i].type === ('PullRequestEvent') &&
+//       dataArray[i].payload.pull_request.commits > commits) {
+//       commits = dataArray[i].payload.pull_request.commits
+//     }
+//   }
+//   return commits
+// }
+
+// let eventMostCommited = mostCommits(githubData);
+// console.log(eventMostCommited);
 
 // question #6 - which programming languages were affected by Steve's events?
 
