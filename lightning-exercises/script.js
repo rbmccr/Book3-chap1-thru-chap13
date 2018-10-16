@@ -123,3 +123,96 @@ console.log(h1);
 
 var second_article = document.querySelectorAll('.article__section')[1];
 second_article.classList.add('highlight');
+
+// ------------------------ Functions
+
+// 1.Write a function that takes a string of a dog breed as an argument
+//   (like ‘border collie’)
+// 2.Have the function return “my favorite dog breed is” plus the passed
+//   in string. If no argument is passed to the function, return “I like 
+//   cats”.
+// 3.Execute the function in a way that captures the returned value in 
+//   a variable.
+// 4.Console.log the string “When it comes to pets,” plus the returned
+//   value of the function.
+
+let dog = function(breed) {
+  if (breed === undefined) { //can also just pass breeed (boolean)
+    return `I like cats.`
+  }
+  return `my favorite dog breed is ${breed}`
+};
+
+console.log(`When it comes to pets, ${dog('German Shepherd')}`);
+console.log(`When it comes to pets, ${dog()}`);
+
+// 1.Create a function that creates an object with three properties: 
+// name, age, profession. Have the function take an array as an argument.
+// In the body of the function, loop over the array to set the values of 
+// the object’s properties. log the result to the console as a table.
+// 2.Create a second function that takes three arguments: name, age, 
+// profession. Have the function place the three arguments into an array
+// and pass that array to the first function by calling it.
+
+let object = {}
+let array = []
+function getrekt(array) {
+  for (let i = 0; i < array.length; i++) {
+    if (i == 0) {
+      object.name = array[i];
+    } else if (i == 1) {
+      object.age = array[i];
+    } else if (i == 2) {
+      object.profession = array[i];
+    } else {
+      console.log ('error in loop, function getrekt()');
+    }
+  }
+  return object;
+}
+
+function yoyo(name, age, profession) {
+  array = [name, age, profession];
+  getrekt(array);
+}
+
+yoyo("Steve", 30, "Nothing");
+console.table(object);
+
+yoyo("Biggie Smalls", "24", "Rapper");
+console.table(object);
+
+
+// Alternative method:
+const personalObjectMaker = (array) => {
+  let personalObj = {};
+  const properties = ["name", "age", "profession"];
+  //1st forEach argument is the array value at index 'i' in the array
+  //2nd argument is always index, 3rd argument is the array itself
+  properties.forEach((property, index) => {
+  personalObj[property] = array[index];
+});
+  return console.table(personalObj)
+}
+
+const personalInfo = (name, age, profession) => {
+  const personalArray = [name, age, profession];
+  personalObjectMaker(personalArray);
+}
+
+personalInfo("Brendan", 25, "Student");
+
+// 1. Create a function that logs the result of adding two numbers
+// 2. Create a second function called calculate that takes three 
+//    arguments: two numbers and a function
+// 3. Execute the second function and make it output 5
+
+function add(a, b) {
+  return a + b;
+}
+
+function calculate(x, y, func) {
+  return func(x, y);
+}
+
+console.log(calculate(2, 3, add));
