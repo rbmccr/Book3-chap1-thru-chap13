@@ -4446,7 +4446,14 @@ countUniqueEvents('deleteevent');
 countUniqueEvents('createevent');
 countUniqueEvents('issuecommentevent');
 
-// question #3 
+// Brian's solution to #2...
+// loops through sorted array and creates object with event type and count
+let counts = {};
+for (let i = 0; i < eventArray.length; i++) {
+ counts[eventArray[i]] = 1 + (counts[eventArray[i]] || 0);
+}
+
+// question #3 -----------------------------------------------
 let githubUsers = [];
 
 for(let i = 0; i < githubData.length; i++) {
@@ -4600,6 +4607,7 @@ if (jscript > python) {
 console.log(`Answer #1... Total commits: ${commits}`);
 //Answer to question #2: Event totals: create: 4, delete: 4, comment: 4, pull: 7, push: 11
 console.log('Answer #2...', eventObject);
+console.log('Answer #2...', counts);
 //Answer to question #3: Array of usernames with approved pull requests
 console.log('Answer #3...', githubUsers);
 //Answer to question #4: 
