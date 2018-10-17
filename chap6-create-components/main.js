@@ -73,43 +73,41 @@ const students = [
   }
 ]
 
-let studentComponent = "";
 const container = document.querySelector("#container");
 
 // -------------------------------- Practice -------------------------------- //
 
-// const h1 = (title, style) => {
-//   return `<h1 class="${style}">${title}</h1>`;
-// }
+const h1 = (title, status) => {
+  return `<h1 class="${status}">${title}</h1>`;
+}
 
-// const section = (title, style) => {
-//   return `<section class="bordered dashed ${style} ${studentComponent}">${title}</section>`;
-// }
+const section = (title, style) => {
+  return `<section class="bordered dashed ${style}">${title}</section>`;
+}
 
-// const aside = (title, style) => {
-//   return `<aside class="${style}">${title}</aside>`;
-// }
+const aside = (title, style) => {
+  return `<aside class="${style}">${title}</aside>`;
+}
 
-// const student = (name, classType, info) => `
-//     <div id="student">
-//         ${h1(name, "xx-large")}
-//         ${section(classType, "section--padded")}
-//         ${aside(info, "pushRight")}
-//     </div>
-// `
+const student = (name, classType, info, status) => `
+    <div id="student">
+        ${h1(name, status)}
+        ${section(classType, "section--padded")}
+        ${aside(info, "pushRight")}
+    </div>
+`
 
-// function classroom() {
-//   for (i = 0; i < students.length; i++) {
-//     if (students[i].score >= 60) {
-//         studentComponent = "passing";
-//     } else {
-//         studentComponent = "failing";
-//     }
-//     container.innerHTML += student(students[i].name, students[i].class, students[i].info);
-//   }
-// }
+// Begin Joe's solution
+let studentComponent = "";
 
-// classroom();
+students.forEach( (currentStudent) => {
+    if (currentStudent.score >= 60) {
+        studentComponent = student(currentStudent.name, currentStudent.class, currentStudent.info, "passing");
+    } else {
+        studentComponent = student(currentStudent.name, currentStudent.class, currentStudent.info, "failing"); 
+    }
+    container.innerHTML += `${studentComponent}`;
+});
 
 // -------------------------------- Challenge -------------------------------- //
 
@@ -185,27 +183,27 @@ const container = document.querySelector("#container");
 
 // -------------------------------- Advanced Challenge -------------------------------- //
 
-const article = document.createElement('article');
-article.setAttribute('id', 'messages');
-document.body.appendChild(article);
+// const article = document.createElement('article');
+// article.setAttribute('id', 'messages');
+// document.body.appendChild(article);
 
-let target = document.querySelector('#messages');
-let fragment = document.createDocumentFragment();
+// let target = document.querySelector('#messages');
+// let fragment = document.createDocumentFragment();
 
-//creates random 5 character line of text
-let text = "";
-function printRandom() {
-  text = Math.random().toString(36).substring(2, 7);
-  return text;
-}
+// //creates random 5 character line of text
+// let text = "";
+// function printRandom() {
+//   text = Math.random().toString(36).substring(2, 7);
+//   return text;
+// }
 
-//creates a section element, adds a class, adds text content, and appends it to the DOM
-for (let i = 0; i < 5; i++) {
-  const section = document.createElement('section');
-  printRandom();
-  section.textContent = text;
-  section.setAttribute('class', 'message');
-  fragment.appendChild(section);
-}
+// //creates a section element, adds a class, adds text content, and appends it to the DOM
+// for (let i = 0; i < 5; i++) {
+//   const section = document.createElement('section');
+//   printRandom();
+//   section.textContent = text;
+//   section.setAttribute('class', 'message');
+//   fragment.appendChild(section);
+// }
 
-target.appendChild(fragment);
+// target.appendChild(fragment);
