@@ -185,25 +185,14 @@ const container = document.querySelector("#container");
 
 // -------------------------------- Advanced Challenge -------------------------------- //
 
-const article = document.createElement('article');
-article.setAttribute('id', 'messages');
-document.body.appendChild(article);
-
 let target = document.querySelector('#messages');
 let fragment = document.createDocumentFragment();
-
-//creates random 5 character line of text
-let text = "";
-function printRandom() {
-  text = Math.random().toString(36).substring(2, 7);
-  return text;
-}
 
 //creates a section element, adds a class, adds text content, and appends it to the DOM
 for (let i = 0; i < 5; i++) {
   const section = document.createElement('section');
-  printRandom();
-  section.textContent = text;
+  //creates random 5 character line of text (base 36 is 0-9 & A-Z)
+  section.textContent = Math.random().toString(36).substring(2, 7);
   section.setAttribute('class', 'message');
   fragment.appendChild(section);
 }
