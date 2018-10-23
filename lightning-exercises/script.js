@@ -216,3 +216,9 @@ function calculate(x, y, func) {
 }
 
 console.log(calculate(2, 3, add));
+
+const article = document.getElementById('article')
+
+article.addEventListener("click", function(event) {
+  console.log(event.target.textContent);
+})
